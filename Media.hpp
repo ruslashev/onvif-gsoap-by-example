@@ -1,12 +1,14 @@
+#include <string>
+
 // Base class for Snapshot and Stream
 class Media {
 
 public:
-	// Overloaded in derived classes
-	Media();
-	// virtual ~Media();
+    // Overloaded in derived classes
+    Media();
+    // virtual ~Media();
 
-	// Returns formatted curl command for downloading snapshot
+    // Returns formatted curl command for downloading snapshot
     virtual std::string getDownloadUri(const std::string mediaUri) = 0;
 
     // Returns formatted curl command for uploading snapshot
@@ -16,11 +18,10 @@ public:
     std::string getTimeCreated(void);
 
 protected:
-	// Helper methods for subclasses
+    // Helper methods for subclasses
     static std::string string_format(const std::string fmt_str, ...);
     static std::string formattedTimeStamp(void);
 
 private:
-	std::string _timeCreated;
-	
+    std::string _timeCreated;
 };

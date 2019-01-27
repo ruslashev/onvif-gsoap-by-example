@@ -8,32 +8,32 @@
 
 
 Snapshot::Snapshot(std::string path, std::string name)
-		: Media(){	// Call base class constructor
-	// Create a name for the snapshot
-    this->_snapshotPath = path;
-    this->_snapshotName = name;
-}
+    : Media(){	// Call base class constructor
+        // Create a name for the snapshot
+        this->_snapshotPath = path;
+        this->_snapshotName = name;
+    }
 
 Snapshot::~Snapshot(void){
     // Delete the snapshot file from disk.
     this->deleteFromDisk();
-    
+
 }
 
 std::string Snapshot::getDownloadUri(const std::string snapshotUri){
-	return Media::string_format("curl --create-dirs -o %s %s", this->_snapshotName.c_str(), snapshotUri.c_str());
+    return Media::string_format("curl --create-dirs -o %s %s", this->_snapshotName.c_str(), snapshotUri.c_str());
 }
 
 /*
  * Get the FTP shell cmd for uploading this snapshot to the FTP server.
  */
 std::string Snapshot::getUploadUri(const std::string ftpIP, const std::string ftpUser, const std::string ftpPwd){
-	return Media::string_format("curl -C - --ftp-create-dirs -u %s:%s -T %s/%s ftp://%s/",
-								ftpUser.c_str(), 
-                                ftpPwd.c_str(), 
-                                this->_snapshotPath.c_str(), 
-                                this->_snapshotName.c_str(), 
-                                ftpIP.c_str());
+    return Media::string_format("curl -C - --ftp-create-dirs -u %s:%s -T %s/%s ftp://%s/",
+            ftpUser.c_str(), 
+            ftpPwd.c_str(), 
+            this->_snapshotPath.c_str(), 
+            this->_snapshotName.c_str(), 
+            ftpIP.c_str());
 }
 
 size_t Snapshot::saveLocally(void *ptr, size_t size, size_t nmemb, FILE *stream) {
@@ -48,7 +48,7 @@ void Snapshot::deleteFromDisk(void) {
 }
 
 CURLcode Snapshot::download(const std::string downloadUri) {
-	CURL *curl;
+    CURL *curl;
     FILE *fp;
     CURLcode res;
     char const *url = downloadUri.c_str();

@@ -15,11 +15,11 @@ PluginOBJ=$(PluginSOURCE)/wsaapi.o $(PluginSOURCE)/wsseapi.o $(PluginSOURCE)/thr
 SRC= $(SOURCE)/stdsoap2.o  $(SOURCE)/soapC.o $(SOURCE)/soapClient.o $(SOURCE)/Media.o $(SOURCE)/Snapshot.o  $(SOURCE)/main.o $(PluginOBJ) $(ProxyOBJ)
 OBJECTS = $(patsubst %.cpp,%.o,$(SRC))
 TARGET=ipconvif
-all: $(TARGET) 
-$(TARGET):$(OBJECTS) 
+all: $(TARGET)
+$(TARGET):$(OBJECTS)
 	$(CC) $(CPPFLAG) $(OBJECTS)  $(INCLUDE)  $(LIB) -o $(TARGET)
 $(OBJECTS):%.o : %.cpp
 	$(CC) -c $(CPPFLAG) $(INCLUDE) $< -o $@
 clean:
-	rm -rf  $(OBJECTS) 
+	rm -rf  $(OBJECTS)
 

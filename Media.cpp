@@ -33,11 +33,11 @@ std::string Media::string_format(const std::string fmt_str, ...) {
 }
 
 std::string Media::formattedTimeStamp(void) {
-	std::stringstream timeStampString;
+    std::stringstream timeStampString;
     char timeBuf [80];
 
-	std::time_t result = std::time(nullptr);
-	struct tm* now = std::localtime( & result );
+    std::time_t result = std::time(nullptr);
+    struct tm* now = std::localtime( & result );
     std::strftime(timeBuf,80,"%Y-%m-%d-%H-%M-%S",now);
     timeStampString << timeBuf;
     return timeStampString.str();
