@@ -11,12 +11,11 @@
 #include <openssl/rsa.h>
 #include "ErrorLog.h"
 
-#include "proxycpp/soapDeviceBindingProxy.h"
-#include "proxycpp/soapMediaBindingProxy.h"
-#include "proxycpp/soapPTZBindingProxy.h"
-
-#include "proxycpp/soapPullPointSubscriptionBindingProxy.h"
-#include "proxycpp/soapRemoteDiscoveryBindingProxy.h"
+#include "deps/soapDeviceBindingProxy.h"
+#include "deps/soapMediaBindingProxy.h"
+#include "deps/soapPTZBindingProxy.h"
+#include "deps/soapPullPointSubscriptionBindingProxy.h"
+#include "deps/soapRemoteDiscoveryBindingProxy.h"
 
 #include <stdarg.h>  // For va_start, etc.
 #include <memory>    // For std::unique_ptr
