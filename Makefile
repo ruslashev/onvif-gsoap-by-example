@@ -2,7 +2,7 @@ CC = g++
 
 CPPFLAG = -Wall -g -w -fPIC -DWITH_NONAMESPACES -fno-use-cxa-atexit -fexceptions -DWITH_DOM  -DWITH_OPENSSL -std=c++0x -static-libstdc++
 
-INCLUDE +=-I./include -I./deps/
+INCLUDE +=-I./deps/
 
 LIB= -lssl -lcrypto -lcurl
 
@@ -26,7 +26,7 @@ all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
 	@echo link $(TARGET)
-	@$(CC) $(CPPFLAG) $(OBJECTS)  $(INCLUDE)  $(LIB) -o $(TARGET)
+	@$(CC) $(CPPFLAG) $(OBJECTS) $(INCLUDE)  $(LIB) -o $(TARGET)
 
 $(OBJECTS):%.o: %.cpp
 	@echo cc $<
