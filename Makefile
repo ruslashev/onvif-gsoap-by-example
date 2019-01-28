@@ -24,11 +24,13 @@ TARGET=ipconvif
 
 all: $(TARGET)
 
-$(TARGET):$(OBJECTS)
-	$(CC) $(CPPFLAG) $(OBJECTS)  $(INCLUDE)  $(LIB) -o $(TARGET)
+$(TARGET): $(OBJECTS)
+	@echo link $(TARGET)
+	@$(CC) $(CPPFLAG) $(OBJECTS)  $(INCLUDE)  $(LIB) -o $(TARGET)
 
-$(OBJECTS):%.o : %.cpp
-	$(CC) -c $(CPPFLAG) $(INCLUDE) $< -o $@
+$(OBJECTS):%.o: %.cpp
+	@echo cc $<
+	@$(CC) -c $(CPPFLAG) $(INCLUDE) $< -o $@
 
 clean:
 	rm -rf  $(OBJECTS)
