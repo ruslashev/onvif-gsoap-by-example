@@ -20,7 +20,7 @@ PluginOBJ = $(PluginSOURCE)/wsaapi.o $(PluginSOURCE)/wsseapi.o $(PluginSOURCE)/t
             $(PluginSOURCE)/duration.o $(PluginSOURCE)/smdevp.o $(PluginSOURCE)/mecevp.o \
             $(PluginSOURCE)/dom.o
 
-SRC = ./deps/stdsoap2.o ./deps/soapC.o ./deps/soapClient.o ./Media.o ./Snapshot.o ./main.o \
+SRC = ./deps/stdsoap2.o ./deps/soapC.o ./Media.o ./Snapshot.o ./main.o \
       $(PluginOBJ) $(ProxyOBJ)
 
 OBJECTS = $(patsubst %.cpp,%.o,$(SRC))
