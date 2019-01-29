@@ -14,7 +14,7 @@ ProxyOBJ = $(PROXYSOURCE)/soapDeviceBindingProxy.o $(PROXYSOURCE)/soapMediaBindi
            $(PROXYSOURCE)/soapPullPointSubscriptionBindingProxy.o \
            $(PROXYSOURCE)/soapRemoteDiscoveryBindingProxy.o
 
-PluginSOURCE = plugin
+PluginSOURCE = deps
 
 PluginOBJ = $(PluginSOURCE)/wsaapi.o $(PluginSOURCE)/wsseapi.o $(PluginSOURCE)/threads.o \
             $(PluginSOURCE)/duration.o $(PluginSOURCE)/smdevp.o $(PluginSOURCE)/mecevp.o \

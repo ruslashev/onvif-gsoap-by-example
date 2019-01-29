@@ -5,9 +5,9 @@
 
 #include <iostream>
 #include "stdio.h"
-#include "wsdd.nsmap"
-#include "plugin/wsseapi.h"
-#include "plugin/wsaapi.h"
+#include "deps/wsdd.nsmap"
+#include "deps/wsseapi.h"
+#include "deps/wsaapi.h"
 #include <openssl/rsa.h>
 #include "ErrorLog.h"
 
