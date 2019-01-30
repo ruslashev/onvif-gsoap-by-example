@@ -126,7 +126,7 @@ int main(int argc, char* argv[])
     _tds__GetDeviceInformation *tds__GetDeviceInformation = soap_new__tds__GetDeviceInformation(soap, -1);
     _tds__GetDeviceInformationResponse *tds__GetDeviceInformationResponse = soap_new__tds__GetDeviceInformationResponse(soap, -1);
 
-    if (SOAP_OK == proxyDevice.GetDeviceInformation(tds__GetDeviceInformation, tds__GetDeviceInformationResponse))
+    if (SOAP_OK == proxyDevice.GetDeviceInformation(tds__GetDeviceInformation, *tds__GetDeviceInformationResponse))
     {
         processEventLog(__FILE__, __LINE__, stdout, "-------------------DeviceInformation-------------------");
         processEventLog(__FILE__, __LINE__, stdout, "Manufacturer:%sModel:%s\r\nFirmwareVersion:%s\r\nSerialNumber:%s\r\nHardwareId:%s", tds__GetDeviceInformationResponse->Manufacturer.c_str(),
@@ -145,10 +145,9 @@ int main(int argc, char* argv[])
 
     // Get Device capabilities
     _tds__GetCapabilities *tds__GetCapabilities = soap_new__tds__GetCapabilities(soap, -1);
-    tds__GetCapabilities->Category.push_back(tt__CapabilityCategory__All);
     _tds__GetCapabilitiesResponse *tds__GetCapabilitiesResponse = soap_new__tds__GetCapabilitiesResponse(soap, -1);
 
-    if (SOAP_OK == proxyDevice.GetCapabilities(tds__GetCapabilities, tds__GetCapabilitiesResponse))
+    if (SOAP_OK == proxyDevice.GetCapabilities(tds__GetCapabilities, *tds__GetCapabilitiesResponse))
     {
 
         if (tds__GetCapabilitiesResponse->Capabilities->Media != NULL)
@@ -183,7 +182,7 @@ int main(int argc, char* argv[])
     _trt__GetProfilesResponse *trt__GetProfilesResponse = soap_new__trt__GetProfilesResponse(soap, -1);
 
 
-    if (SOAP_OK == proxyMedia.GetProfiles(trt__GetProfiles, trt__GetProfilesResponse))
+    if (SOAP_OK == proxyMedia.GetProfiles(trt__GetProfiles, *trt__GetProfilesResponse))
     {
         _trt__GetSnapshotUriResponse *trt__GetSnapshotUriResponse = soap_new__trt__GetSnapshotUriResponse(soap, -1);
         _trt__GetSnapshotUri *trt__GetSnapshotUri = soap_new__trt__GetSnapshotUri(soap, -1);
@@ -201,7 +200,7 @@ int main(int argc, char* argv[])
             }
 
             // Get Snapshot URI for profile
-            if (SOAP_OK == proxyMedia.GetSnapshotUri(trt__GetSnapshotUri, trt__GetSnapshotUriResponse))
+            if (SOAP_OK == proxyMedia.GetSnapshotUri(trt__GetSnapshotUri, *trt__GetSnapshotUriResponse))
             {
                 processEventLog(__FILE__, __LINE__, stdout, "Profile Name- %s", trt__GetProfilesResponse->Profiles[i]->Name.c_str());
                 processEventLog(__FILE__, __LINE__, stdout, "SNAPSHOT URI- %s", trt__GetSnapshotUriResponse->MediaUri->Uri.c_str());

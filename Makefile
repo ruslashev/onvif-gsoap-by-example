@@ -34,7 +34,7 @@ $(TARGET): $(OBJECTS)
 	@$(CC) $(CPPFLAG) $(OBJECTS) $(INCLUDE) $(LIB) -o $(TARGET)
 
 $(OBJECTS):%.o: %.cpp
-	@echo cc $<
+	@echo cxx $<
 	@$(CC) -c $(CPPFLAG) $(INCLUDE) $< -o $@
 
 clean:
