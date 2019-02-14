@@ -63,18 +63,9 @@ int main(int argc, char* argv[])
     if(!(  cmdOptionExists(argv, argv+argc, "-cIp")
                 && cmdOptionExists(argv, argv+argc, "-cUsr")
                 && cmdOptionExists(argv, argv+argc, "-cPwd")
-#ifdef WITH_FTP_UPLOAD
-                && cmdOptionExists(argv, argv+argc, "-fIp")
-                && cmdOptionExists(argv, argv+argc, "-fUsr")
-                && cmdOptionExists(argv, argv+argc, "-fPwd")
-#endif
         ))
     {
         std::cout  <<  "usage: ./ipconvif -cIp [<camera-ip>:<port>] -cUsr <cam-id> -cPwd <cam-pwd>\n";
-
-#ifdef WITH_FTP_UPLOAD
-        std::cout  <<  "                  -fIp [<ftp-server-ip>:<port>] -fUsr <ftp-id> -fPwd <ftp-pwd>\n";
-#endif
 
         return -1;
     }
@@ -83,16 +74,7 @@ int main(int argc, char* argv[])
     char *camUsr = getCmdOption(argv, argv+argc, "-cUsr");
     char *camPwd = getCmdOption(argv, argv+argc, "-cPwd");
 
-#ifdef WITH_FTP_UPLOAD
-    char *ftpIp = getCmdOption(argv, argv+argc, "-fIp");
-    char *ftpUsr = getCmdOption(argv, argv+argc, "-fUsr");
-    char *ftpPwd = getCmdOption(argv, argv+argc, "-fPwd");
-#endif
-
     if (!(camIp && camUsr && camPwd
-#ifdef WITH_FTP_UPLOAD
-                && ftpIp && ftpUsr && ftpPwd
-#endif
          ))
     {
         processEventLog(__FILE__, __LINE__, stdout, "Error: Invalid args (All args are required!)");
@@ -210,15 +192,6 @@ int main(int argc, char* argv[])
 
                 // Download snapshot file locally
                 CURLcode result = snapshot->download(trt__GetSnapshotUriResponse->MediaUri->Uri);
-
-#ifdef WITH_FTP_UPLOAD
-                if(CURLE_OK == result) {
-                    std::string upload = snapshot->getUploadUri(gateName, ftpIp, ftpUsr, ftpPwd);
-                    processEventLog(__FILE__, __LINE__, stdout, "Uploading using: %s", upload.c_str());
-                    system(upload.c_str());
-                    sleep(5);
-                }
-#endif
 
                 // Delete current 'Snapshot' instance
                 // delete snapshot;
