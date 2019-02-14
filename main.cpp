@@ -20,28 +20,12 @@
 #include <stdarg.h>  // For va_start, etc.
 #include <memory>    // For std::unique_ptr
 #include <ctime>
-#include <sstream>	// For stringstream
+#include <sstream>   // For stringstream
 #include "Snapshot.hpp"
 #include <algorithm>
 
 #define MAX_HOSTNAME_LEN 128
 #define MAX_LOGMSG_LEN 256
-
-
-char* getCmdOption(char ** begin, char ** end, const std::string & option)
-{
-    char ** itr = std::find(begin, end, option);
-    if (itr != end && ++itr != end)
-    {
-        return *itr;
-    }
-    return 0;
-}
-
-bool cmdOptionExists(char** begin, char** end, const std::string& option)
-{
-    return std::find(begin, end, option) != end;
-}
 
 void PrintErr(struct soap* _psoap)
 {
@@ -52,7 +36,6 @@ void PrintErr(struct soap* _psoap)
 
 int main(int argc, char* argv[])
 {
-
     char szHostName[MAX_HOSTNAME_LEN] = { 0 };
 
     // Proxy declarations
@@ -60,19 +43,9 @@ int main(int argc, char* argv[])
     RemoteDiscoveryBindingProxy proxyDiscovery;
     MediaBindingProxy proxyMedia;
 
-    if(!(  cmdOptionExists(argv, argv+argc, "-cIp")
-                && cmdOptionExists(argv, argv+argc, "-cUsr")
-                && cmdOptionExists(argv, argv+argc, "-cPwd")
-        ))
-    {
-        std::cout  <<  "usage: ./ipconvif -cIp [<camera-ip>:<port>] -cUsr <cam-id> -cPwd <cam-pwd>\n";
-
-        return -1;
-    }
-
-    char *camIp = getCmdOption(argv, argv+argc, "-cIp");
-    char *camUsr = getCmdOption(argv, argv+argc, "-cUsr");
-    char *camPwd = getCmdOption(argv, argv+argc, "-cPwd");
+    const char *camIp = "x.x.x.x";
+    const char *camUsr = "asdf";
+    const char *camPwd = "asdf";
 
     if (!(camIp && camUsr && camPwd
          ))
