@@ -9,7 +9,6 @@
 #include "deps/wsseapi.h"
 #include "deps/wsaapi.h"
 #include <openssl/rsa.h>
-#include "ErrorLog.h"
 
 #include "deps/soapDeviceBindingProxy.h"
 #include "deps/soapMediaBindingProxy.h"
@@ -27,11 +26,16 @@
 #define MAX_HOSTNAME_LEN 128
 #define MAX_LOGMSG_LEN 256
 
-void PrintErr(struct soap* _psoap)
+#define log(...) do { printf(__VA_ARGS__); puts(""); } while (0)
+
+#define die(...) do { log(__VA_ARGS__); exit(1); } while (0)
+
+void log_soap_error(struct soap* _psoap)
 {
     fflush(stdout);
-    processEventLog(__FILE__, __LINE__, stdout, "error:%d faultstring:%s faultcode:%s faultsubcode:%s faultdetail:%s", _psoap->error,
-            *soap_faultstring(_psoap), *soap_faultcode(_psoap),*soap_faultsubcode(_psoap), *soap_faultdetail(_psoap));
+    log("error=%d faultstring=%s faultcode=%s faultsubcode=%s faultdetail=%s", _psoap->error,
+            *soap_faultstring(_psoap), *soap_faultcode(_psoap),*soap_faultsubcode(_psoap),
+            *soap_faultdetail(_psoap));
 }
 
 int main(int argc, char* argv[])
@@ -46,13 +50,6 @@ int main(int argc, char* argv[])
     const char *camIp = "x.x.x.x";
     const char *camUsr = "asdf";
     const char *camPwd = "asdf";
-
-    if (!(camIp && camUsr && camPwd
-         ))
-    {
-        processEventLog(__FILE__, __LINE__, stdout, "Error: Invalid args (All args are required!)");
-        return -1;
-    }
 
     strcat(szHostName, "http://");
     strcat(szHostName, camIp);
@@ -83,14 +80,17 @@ int main(int argc, char* argv[])
 
     if (SOAP_OK == proxyDevice.GetDeviceInformation(tds__GetDeviceInformation, *tds__GetDeviceInformationResponse))
     {
-        processEventLog(__FILE__, __LINE__, stdout, "-------------------DeviceInformation-------------------");
-        processEventLog(__FILE__, __LINE__, stdout, "Manufacturer:%sModel:%s\r\nFirmwareVersion:%s\r\nSerialNumber:%s\r\nHardwareId:%s", tds__GetDeviceInformationResponse->Manufacturer.c_str(),
-                tds__GetDeviceInformationResponse->Model.c_str(), tds__GetDeviceInformationResponse->FirmwareVersion.c_str(),
-                tds__GetDeviceInformationResponse->SerialNumber.c_str(), tds__GetDeviceInformationResponse->HardwareId.c_str());
+        log("-------------------DeviceInformation-------------------");
+        log("Manufacturer:%s\nModel:%s\nFirmwareVersion:%s\nSerialNumber:%s\nHardwareId:%s",
+                tds__GetDeviceInformationResponse->Manufacturer.c_str(),
+                tds__GetDeviceInformationResponse->Model.c_str(),
+                tds__GetDeviceInformationResponse->FirmwareVersion.c_str(),
+                tds__GetDeviceInformationResponse->SerialNumber.c_str(),
+                tds__GetDeviceInformationResponse->HardwareId.c_str());
     }
     else
     {
-        PrintErr(proxyDevice.soap);
+        log_soap_error(proxyDevice.soap);
         return -1;
     }
 
@@ -107,13 +107,13 @@ int main(int argc, char* argv[])
 
         if (tds__GetCapabilitiesResponse->Capabilities->Media != NULL)
         {
-            processEventLog(__FILE__, __LINE__, stdout, "-------------------Media-------------------");
-            processEventLog(__FILE__, __LINE__, stdout, "XAddr:%s", tds__GetCapabilitiesResponse->Capabilities->Media->XAddr.c_str());
+            log("-------------------Media-------------------");
+            log("XAddr:%s", tds__GetCapabilitiesResponse->Capabilities->Media->XAddr.c_str());
 
-            processEventLog(__FILE__, __LINE__, stdout, "-------------------streaming-------------------");
-            processEventLog(__FILE__, __LINE__, stdout, "RTPMulticast:%s", (tds__GetCapabilitiesResponse->Capabilities->Media->StreamingCapabilities->RTPMulticast) ? "Y" : "N");
-            processEventLog(__FILE__, __LINE__, stdout, "RTP_TCP:%s", (tds__GetCapabilitiesResponse->Capabilities->Media->StreamingCapabilities->RTP_USCORETCP) ? "Y" : "N");
-            processEventLog(__FILE__, __LINE__, stdout, "RTP_RTSP_TCP:%s", (tds__GetCapabilitiesResponse->Capabilities->Media->StreamingCapabilities->RTP_USCORERTSP_USCORETCP) ? "Y" : "N");
+            log("-------------------streaming-------------------");
+            log("RTPMulticast:%s", (tds__GetCapabilitiesResponse->Capabilities->Media->StreamingCapabilities->RTPMulticast) ? "Y" : "N");
+            log("RTP_TCP:%s", (tds__GetCapabilitiesResponse->Capabilities->Media->StreamingCapabilities->RTP_USCORETCP) ? "Y" : "N");
+            log("RTP_RTSP_TCP:%s", (tds__GetCapabilitiesResponse->Capabilities->Media->StreamingCapabilities->RTP_USCORERTSP_USCORETCP) ? "Y" : "N");
 
             proxyMedia.soap_endpoint = tds__GetCapabilitiesResponse->Capabilities->Media->XAddr.c_str();
 
@@ -142,7 +142,7 @@ int main(int argc, char* argv[])
         _trt__GetSnapshotUriResponse *trt__GetSnapshotUriResponse = soap_new__trt__GetSnapshotUriResponse(soap, -1);
         _trt__GetSnapshotUri *trt__GetSnapshotUri = soap_new__trt__GetSnapshotUri(soap, -1);
 
-        // processEventLog(__FILE__, __LINE__, stdout, "-------------------ONE SNAPSHOT PER PROFILE-------------------");
+        // log(-------------------ONE SNAPSHOT PER PROFILE-------------------");
 
         // Loop for every profile
         for (int i = 0; i < trt__GetProfilesResponse->Profiles.size(); i++)
@@ -157,8 +157,8 @@ int main(int argc, char* argv[])
             // Get Snapshot URI for profile
             if (SOAP_OK == proxyMedia.GetSnapshotUri(trt__GetSnapshotUri, *trt__GetSnapshotUriResponse))
             {
-                processEventLog(__FILE__, __LINE__, stdout, "Profile Name- %s", trt__GetProfilesResponse->Profiles[i]->Name.c_str());
-                processEventLog(__FILE__, __LINE__, stdout, "SNAPSHOT URI- %s", trt__GetSnapshotUriResponse->MediaUri->Uri.c_str());
+                log("Profile Name- %s", trt__GetProfilesResponse->Profiles[i]->Name.c_str());
+                log("SNAPSHOT URI- %s", trt__GetSnapshotUriResponse->MediaUri->Uri.c_str());
 
                 // Create a 'Snapshot' instance
                 Snapshot *snapshot = new Snapshot("./downloads", "1.jpg");
@@ -175,13 +175,13 @@ int main(int argc, char* argv[])
             }
             else
             {
-                PrintErr(proxyMedia.soap);
+                log_soap_error(proxyMedia.soap);
             }
         }
     }
     else
     {
-        PrintErr(proxyMedia.soap);
+        log_soap_error(proxyMedia.soap);
     }
 
     // MediaBindingProxy ends
