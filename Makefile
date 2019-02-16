@@ -1,7 +1,7 @@
 CC = g++
 
 CPPFLAG = -Wall -g -w -fPIC -DWITH_NONAMESPACES -fno-use-cxa-atexit -fexceptions -DWITH_DOM \
-          -DWITH_OPENSSL -std=c++0x -static-libstdc++
+          -DWITH_OPENSSL -std=c++0x -static-libstdc++ -Wno-misleading-indentation
 
 INCLUDE += -I./deps/
 
@@ -20,7 +20,7 @@ PluginOBJ = $(PluginSOURCE)/wsaapi.o $(PluginSOURCE)/wsseapi.o $(PluginSOURCE)/t
             $(PluginSOURCE)/duration.o $(PluginSOURCE)/smdevp.o $(PluginSOURCE)/mecevp.o \
             $(PluginSOURCE)/dom.o
 
-SRC = ./deps/stdsoap2.o ./deps/soapC.o ./Media.o ./Snapshot.o ./main.o \
+SRC = ./deps/stdsoap2.o ./deps/soapC.o ./Snapshot.o ./main.o \
       $(PluginOBJ) $(ProxyOBJ)
 
 OBJECTS = $(patsubst %.cpp,%.o,$(SRC))
