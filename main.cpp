@@ -8,7 +8,6 @@
 #include "deps/soapPTZBindingProxy.h"
 #include "deps/soapPullPointSubscriptionBindingProxy.h"
 #include "deps/soapRemoteDiscoveryBindingProxy.h"
-#include <openssl/rsa.h>
 
 #define MAX_HOSTNAME_LEN 128
 
@@ -29,7 +28,6 @@ int main(int argc, char* argv[])
     char szHostName[MAX_HOSTNAME_LEN] = { 0 };
 
     DeviceBindingProxy proxyDevice;
-    RemoteDiscoveryBindingProxy proxyDiscovery;
     MediaBindingProxy proxyMedia;
 
     const char *camIp = "x.x.x.x";
@@ -43,7 +41,6 @@ int main(int argc, char* argv[])
     proxyDevice.soap_endpoint = szHostName;
 
     soap_register_plugin(proxyDevice.soap, soap_wsse);
-    soap_register_plugin(proxyDiscovery.soap, soap_wsse);
     soap_register_plugin(proxyMedia.soap, soap_wsse);
 
     struct soap *soap = soap_new();
@@ -70,9 +67,6 @@ int main(int argc, char* argv[])
         log_soap_error(proxyDevice.soap);
         return 1;
     }
-
-    soap_destroy(soap);
-    soap_end(soap);
 
     _tds__GetCapabilities *capabilities = soap_new__tds__GetCapabilities(soap, -1);
     _tds__GetCapabilitiesResponse *capabilities_response
